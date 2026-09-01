@@ -1,6 +1,7 @@
 const express = require('express');
 
-const db = require('./database/database');
+const gameRoutes = require('./routes/gameRoutes');
+const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
@@ -14,5 +15,9 @@ app.get('/api/health', (req, res) => {
         message: 'GameVault API is running'
     });
 });
+
+app.use('/api/games', gameRoutes);
+
+app.use(errorHandler);
 
 module.exports = app;
