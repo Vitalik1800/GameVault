@@ -1,0 +1,40 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: #f5f5f5;
+    color: #222;
+}
+
+.app_header {
+    padding: 24px;
+    background: #ffffff;
+    border-bottom: 1px solid #ddd;
+}
+
+.app_header h1 {
+    margin: 0 0 8px;
+}
+
+.app_header p {
+    margin: 0;
+    color: #666;
+}
+
+.app_main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+.welcome_section {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 8px;
+}
