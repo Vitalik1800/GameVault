@@ -3,38 +3,396 @@
 }
 
 html {
-    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100%;
 }
 
 body {
+    min-height: 100vh;
     margin: 0;
-    background: #f5f5f5;
-    color: #222;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f6f8;
+    color: #1f2937;
 }
 
-.app_header {
-    padding: 24px;
+button,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app_body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+}
+
+.header {
+    width: 100%;
+    height: 64px;
     background: #ffffff;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #e5e7eb;
 }
 
-.app_header h1 {
-    margin: 0 0 8px;
+.header_content {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
 }
 
-.app_header p {
+.header_brand {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+}
+
+.logo {
     margin: 0;
-    color: #666;
+    font-size: 24px;
+    font-weight: 700;
 }
 
-.app_main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px;
+.header_subtitle {
+    font-size: 14px;
+    color: #6b7280;
 }
 
-.welcome_section {
+.header_actions {
+    display: flex;
+    align-items: center;
+}
+
+.header_button {
+    padding: 8px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
     background: #ffffff;
-    padding: 24px;
+    color: #374151;
+    font-size: 14px;
+}
+
+.header_button:hover {
+    background: #f3f4f6;
+}
+
+.sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background: #ffffff;
+    border-right: 1px solid #e5e7eb;
+}
+
+.navigation {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding: 24px 16px;
+}
+
+.navigation_section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.navigation_title {
+    padding: 0 12px;
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #9ca3af;
+}
+
+.nav_item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 42px;
+    padding: 0 12px;
     border-radius: 8px;
+    color: #4b5563;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.nav_item:hover {
+    background: #f3f4f6;
+    color: #111827;
+}
+
+.nav_item.active {
+    background: #eef2ff;
+    color: #3730a3;
+}
+
+.nav_icon {
+    width: 20px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.nav_label {
+    white-space: nowrap;
+}
+
+.main_content {
+    flex: 1;
+    min-width: 0;
+    padding: 32px;
+}
+
+.dashboard {
+    margin-bottom: 40px;
+}
+
+.dashboard_header {
+    margin-bottom: 24px;
+}
+
+.dashboard_header h2 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.dashboard_description {
+    margin: 6px 0 0;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.stats_grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.stat_card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 22px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;   
+}
+
+.stat_label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #6b7280;
+}
+
+.stat_value {
+    font-size: 30px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.library {
+    width: 100%;
+}
+
+.library_header {
+    margin-bottom: 20px;
+}
+
+.library_header h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.library_description {
+    margin: 6px 0 0;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.library_toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.search_container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+}
+
+.search_icon {
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+.search_input {
+    width: 100%;
+    height: 44px;
+    padding: 0 16px 0 42px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #111827;
+    font-size: 14px;
+    outline: none;
+}
+
+.search_input::placeholder {
+    color: #9ca3af;
+}
+
+.search_input:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+.add_game_button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 8px;
+    background: #4f46e5;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    transition:
+        background-color 0.15s ease,
+        transform 0.15s ease;
+}
+
+.add_game_button:hover {
+    background: #4338ca;
+}
+
+.add_game_button:active {
+    transform: translateY(1px);
+}
+
+.add_game_icon {
+    font-size: 18px;
+    line-height: 1;
+}
+
+#game_library {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+    width: 100%;
+    min-height: 200px;
+}
+
+@media (max-width: 1000px) {
+    .main_content {
+        padding: 24px;
+    }
+
+    .stats_grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #game_library {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    .header {
+        height: auto;
+        min-height: 64px;
+    }
+
+    .header_content {
+        padding: 12px 16px;
+    }
+
+    .header_brand {
+        gap: 8px;
+    }
+
+    .header_subtitle {
+        display: none;
+    }
+
+    .sidebar {
+        width: 72px;
+    }
+
+    .navigation {
+        padding: 20px 10px;
+        gap: 20px;
+    }
+
+    .navigation_title {
+        display: none;
+    }
+
+    .nav_item {
+        justify-content: center;
+        padding: 0;
+    }
+
+    .nav_label {
+        display: none;
+    }
+
+    .main_content {
+        padding: 20px 16px; 
+    }
+
+    .dashboard_header h2 {
+        font-size: 24px;
+    }
+
+    .stats_grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .library_toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search_container {
+        max-width: none;
+    }
+
+    .add_game_button {
+        width: 100%;
+    }
+
+    #game_library {
+        grid-template-columns: 1fr;
+    }
 }
