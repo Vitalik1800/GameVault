@@ -385,6 +385,66 @@ button {
     line-height: 1.2;
 }
 
+.game_actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.edit_game_button,
+.delete_game_button {
+    flex: 1;
+    min-width: 0;
+    padding: 9px 12px;
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+    cursor: pointer;
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.edit_game_button {
+    border: 1px solid #d1d5db;
+    background: #ffffff;
+    color: #374151;
+}
+
+.edit_game_button:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+.edit_game_button:active {
+    background: #e5e7eb;
+}
+
+.delete_game_button {
+    border: 1px solid #fecaca;
+    background: #ffffff;
+    color: #dc2626;
+}
+
+.delete_game_button:hover {
+    background: #fef2f2;
+    border-color: #fca5a5;
+}
+
+.delete_game_button:active {
+    background: #fee2e2;
+}
+
+.edit_game_button:disabled,
+.delete_game_button:disabled,
+.save_button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
 .empty_state {
     grid-column: 1 / -1;
     display: flex;
@@ -848,5 +908,16 @@ button {
     .cancel_button,
     .save_button {
         flex: 1;
+    }
+
+    .game_actions {
+        gap: 7px;
+        margin-top: 7px;
+    }
+
+    .edit_game_button,
+    .delete_game_button {
+        padding: 9px 10px;
+        font-size: 12px;
     }
 }

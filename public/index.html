@@ -358,6 +358,140 @@
 
         </div>
 
+        <div
+            id="edit_game_modal"
+            class="modal">
+
+            <div class="modal_overlay edit_modal_overlay"></div>
+
+            <div class="modal_content">
+
+                <div class="modal_header">
+
+                    <div>
+                        <h2 class="modal_title">
+                            Edit Game
+                        </h2>
+
+                        <p class="modal_description">
+                            Edit game description
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="close_edit_modal_button"
+                        class="close_modal_button"
+                    >
+                        x
+                    </button>
+
+                </div>
+                
+                <form
+                    id="edit_game_form"
+                    class="game_form"
+                    novalidate
+                >
+
+                    <div class="form_group">
+                        <label for="edit_title">Title</label>
+                        <input type="text" id="edit_title" name="title" required>
+                    </div>
+
+                    <div class="form_group">
+                        <label for="edit_description">Description</label>
+                        <textarea
+                            id="edit_description"
+                            name="description"
+                            rows="4"
+                        ></textarea>
+                    </div>
+                
+                    <div class="form_group">
+                        <label for="edit_genre">Genre</label>
+                        <input type="text" id="edit_genre" name="genre" required>
+                    </div>
+
+                    <div class="form_group">
+                        <label for="edit_platform">Platform</label>
+                        <input type="text" id="edit_platform" name="platform" required>
+                    </div>
+
+                    <div class="form_group">
+                        <label for="edit_status">Status</label>
+                        <select id="edit_status" name="status" required>
+                            <option value="Backlog">Backlog</option>
+                            <option value="Playing">Playing</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Dropped">Dropped</option>
+                        </select>
+                    </div>
+
+                    <div class="form_group">
+                        <label for="edit_rating">Rating</label>
+                        <input
+                            type="number"
+                            id="edit_rating"
+                            name="rating"
+                            min="0"
+                            max="10"
+                            step="0.1"
+                        >
+                    </div>
+
+                    <div class="form_group">
+                        <label for="edit_release_year">Release year</label>
+                        <input
+                            type="number"
+                            id="edit_release_year"
+                            name="release_year"
+                            min="1950"
+                            required
+                        >
+                    </div>
+
+                    <div class="form_group">
+                        <label for="edit_cover_url">Cover URL</label>
+                        <input
+                            type="url"
+                            id="edit_cover_url"
+                            name="cover_url"
+                            placeholder="https://..."
+                        >
+                    </div>
+
+                    <div class="modal_actions">
+
+                        <div
+                            class="form_message"
+                            id="edit_form_message"
+                        ></div>
+
+                        <button
+                            type="button"
+                            id="cancel_edit_modal_button"
+                            class="cancel_button"                        
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="submit"
+                            id="update_game_button"
+                            class="save_button"
+                        >
+                            Update
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
     </div>
 
     <script src="js/app.js"></script>
