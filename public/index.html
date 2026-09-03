@@ -152,6 +152,212 @@
 
         </div>
 
+        <div 
+            id="add_game_modal" 
+            class="modal"
+        >
+
+            <div class="modal_overlay"></div>
+
+            <div class="modal_content">
+
+                <div class="modal_header">
+
+                    <div>
+
+                        <h2 class="modal_title">
+                            Add Game
+                        </h2>
+
+                        <p class="modal_description">
+                            Add a new game to your library
+                        </p>
+
+                    </div>
+
+                    <button
+                        type="button" 
+                        id="close_modal_button" 
+                        class="close_modal_button"
+                    >
+                        x
+                    </button>
+
+                </div>
+
+                <form 
+                    id="add_game_form" 
+                    class="game_form"
+                    novalidate
+                >
+
+                    <div class="form_group">
+
+                        <label for="title">
+                            Title
+                        </label>
+
+                        <input 
+                            type="text" 
+                            id="title"
+                            name="title"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form_group">
+
+                        <label for="description">
+                            Description
+                        </label>
+
+                        <textarea
+                            id="description"
+                            name="description"
+                            rows="4"
+                        ></textarea>
+
+                    </div>
+
+                    <div class="form_group">
+
+                        <label for="genre">
+                            Genre
+                        </label>
+
+                        <input
+                            type="text"
+                            id="genre"
+                            name="genre"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form_group">
+
+                        <label for="platform">
+                            Platform
+                        </label>
+
+                        <input 
+                            type="text"
+                            id="platform"
+                            name="platform"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form_group">
+
+                        <label for="status">
+                            Status
+                        </label>
+
+                        <select
+                            id="status"
+                            name="status"
+                            required
+                        >
+                        
+                            <option value="Backlog">
+                                Backlog
+                            </option>
+
+                            <option value="Playing">
+                                Playing
+                            </option>
+
+                            <option value="Completed">
+                                Completed
+                            </option>
+
+                            <option value="Dropped">
+                                Dropped
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form_group">
+
+                        <label for="rating">
+                            Rating
+                        </label>
+
+                        <input
+                            type="number"
+                            id="rating"
+                            name="rating"
+                            min="0"
+                            max="10"
+                            step="0.1"
+                        >
+
+                    </div>
+
+                    <div class="form_group">
+
+                        <label for="release_year">
+                            Release year
+                        </label>
+
+                        <input
+                            type="number"
+                            id="release_year"
+                            name="release_year"
+                            min="1950"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form_group">
+
+                        <label for="cover_url">
+                            Cover URL
+                        </label>
+
+                        <input
+                            type="url"
+                            id="cover_url"
+                            name="cover_url"
+                            placeholder="https://..."
+                        >
+
+                    </div>
+
+                    <div class="modal_actions">
+
+                        <div class="form_message" id="form_message"></div>
+
+                        <button
+                            type="button"
+                            id="cancel_modal_button"
+                            class="cancel_button"
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="submit"
+                            id="save_game_button"
+                            class="save_button"
+                        >
+                            Save
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
     </div>
 
     <script src="js/app.js"></script>
