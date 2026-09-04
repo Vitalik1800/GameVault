@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="header_actions">
-                    <button class="header_button" type="button">
+                    <button class="header_button" id="settings_button" type="button">
                         Settings
                     </button>
                 </div>
@@ -137,6 +137,69 @@
                             <span class="add_game_icon">+</span>
                             <span>Add Game</span>
                         </button>
+
+                    </div>
+
+                    <div class="filters_container">
+                        
+                        <div class="filter_group">
+                            <label for="genre_filter">Genre</label>
+
+                            <select id="genre_filter" class="filter_select">
+                                <option value="">All genres</option>
+                            </select>
+                        </div>
+
+                        <div class="filter_group">
+                            <label for="platform_filter">Platform</label>
+
+                            <select id="platform_filter" class="filter_select">
+                                <option value="">All platforms</option>
+                            </select>
+                        </div>
+
+                        <div class="filter_group">
+                            <label for="status_filter">Status</label>
+
+                            <select id="status_filter" class="filter_select">
+                                <option value="">All statuses</option>
+                                <option value="Backlog">Backlog</option>
+                                <option value="Playing">Playing</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Dropped">Dropped</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter_group">
+                            <label for="rating_filter">Rating</label>
+
+                            <select id="rating_filter" class="filter_select">
+                                <option value="">All ratings</option>
+                                <option value="9">9+</option>
+                                <option value="8">8+</option>
+                                <option value="7">7+</option>
+                                <option value="6">6+</option>
+                                <option value="5">5+</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="sorting_container">
+
+                        <div class="sorting_group">
+                            <label for="sort_filter">Sort by</label>
+
+                            <select id="sort_filter" class="filter_select">
+                                <option value="">Default</option>
+                                <option value="title_asc">Title ↑</option>
+                                <option value="title_desc">Title ↓</option>
+                                <option value="rating_asc">Rating ↑</option>
+                                <option value="rating_desc">Rating ↓</option>
+                                <option value="release_year_asc">Release year ↑</option>
+                                <option value="release_year_desc">Release year ↓</option>
+                            </select>
+                        </div>
 
                     </div>
 
@@ -487,6 +550,195 @@
                     </div>
 
                 </form>
+
+            </div>
+
+        </div>
+        
+        <div
+            id="settings_modal"
+            class="modal">
+
+            <div class="modal_overlay settings_modal_overlay"></div>
+
+            <div class="modal_content">
+
+                <div class="modal_header">
+
+                    <div>
+                        <h2 class="modal_title">
+                            Settings
+                        </h2>
+
+                        <p class="modal_description">
+                            Manage application settings
+                        </p>
+                    </div>
+                    
+                    <button
+                        type="button"
+                        id="close_settings_modal_button"
+                        class="close_modal_button"
+                    >
+                        x
+                    </button>
+
+                </div>
+
+                <div class="settings_content">
+
+                    <div class="settings_section">
+
+                        <div class="settings_section_header">
+                            <h3 class="settings_section_title">
+                                Appearance
+                            </h3>
+
+                            <p class="settings_section_description">
+                                Customize the appearance of GameVault.
+                            </p>
+                        </div>
+
+                        <div class="settings_item">
+
+                            <div class="settings_item_info">
+
+                                <span class="settings_item_title">
+                                    Theme
+                                </span>
+
+                                <span class="settings_item_description">
+                                    Choose the interface theme.
+                                </span>
+
+                            </div>
+
+                            <select 
+                                id="theme_setting"
+                                class="settings_select"
+                            >
+                                <option value="light">
+                                    Light
+                                </option>
+
+                                <option value="dark">
+                                    Dark
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="settings_section">
+
+                        <div class="settings_section_header">
+                            <h3 class="settings_section_title">
+                                Library
+                            </h3>
+
+                            <p class="settings_section_description">
+                                Configure how your game library is displayed.
+                            </p>
+                        </div>
+
+                        <div class="settings_item">
+
+                            <div class="settings_item_info">
+
+                                <span class="settings_item_title">
+                                    Show covers
+                                </span>
+
+                                <span class="settings_item_description">
+                                    Display game cover images in the library.
+                                </span>
+
+                            </div>
+
+                            <label class="settings_switch">
+
+                                <input
+                                    type="checkbox"
+                                    id="show_covers_setting"
+                                    checked
+                                >
+
+                                <span class="settings_switch_slider"></span>
+
+                            </label>
+
+                        </div>
+
+                        <div class="settings_item">
+
+                            <div class="settings_item_info">
+
+                                <span class="settings_item_title">
+                                    Compact cards
+                                </span>
+
+                                <span class="settings_item_description">
+                                    Reduce the size and spacing of game cards.
+                                </span>
+
+                            </div>
+
+                            <label class="settings_switch">
+
+                                <input
+                                    type="checkbox"
+                                    id="compact_cards_setting"
+                                >
+
+                                <span class="settings_switch_slider"></span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="settings_section">
+
+                        <div class="settings_section_header">
+                            <h3 class="settings_section_title">
+                                About
+                            </h3>
+
+                            <p class="settings_section_description">
+                                Information about GameVault.
+                            </p>
+                        </div>
+
+                        <div class="settings_about">
+
+                            <span class="settings_about_name">
+                                GameVault
+                            </span>
+
+                            <span class="settings_about_version">
+                                Version 1.0
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="settings_actions">
+
+                        <button
+                            type="button"
+                            id="reset_settings_button"
+                            class="reset_settings_button"
+                        >
+                            Reset settings
+                        </button>
+
+                    </div>
+
+                </div>
 
             </div>
 

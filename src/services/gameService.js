@@ -32,6 +32,10 @@ const sortGames = (sort, order) => {
     return gameRepository.getSorted(sort, order);
 };
 
+const queryGames = (params) => {
+    return gameRepository.query(params);
+}
+
 const getStats = () => {
     const stats = gameRepository.getStats();
 
@@ -70,5 +74,6 @@ module.exports = {
     searchGames,
     filterGames,
     sortGames,
+    queryGames,
     getStats
 };

@@ -125,6 +125,11 @@ const filter = (filters) => {
         values.push(filters.platform);
     }
 
+    if (filters.rating) {
+        conditions.push('rating >= ?');
+        values.push(filters.rating);
+    }
+
     let query = `
         SELECT * 
         FROM games
@@ -162,6 +167,81 @@ const getSorted = (sort = 'id', order = 'desc') => {
     `;
 
     return db.prepare(query).all();
+};
+
+const query = (params = {}) => {
+    const conditions = [];
+    const values = [];
+
+    if (params.q) {
+        conditions.push(`
+            (
+                title LIKE ?
+                OR genre LIKE ?
+                OR platform LIKE ?
+            )
+        `);
+
+        const searchValue = `%${params.q}%`;
+
+        values.push(
+            searchValue,
+            searchValue,
+            searchValue
+        );
+    }
+
+    if (params.status) {
+        conditions.push('status = ?');
+        values.push(params.status);
+    }
+
+    if (params.genre) {
+        conditions.push('genre = ?');
+        values.push(params.genre);
+    }
+
+    if (params.platform) {
+        conditions.push('platform = ?');
+        values.push(params.platform);
+    }
+
+    if (params.rating) {
+        conditions.push('rating >= ?');
+        values.push(Number(params.rating));
+    }
+
+    let sql = `
+        SELECT * 
+        FROM games
+    `;
+
+    if (conditions.length > 0) {
+        sql += `
+            WHERE ${conditions.join(' AND ')}
+        `;
+    }
+
+    const allowedColumns = {
+        title: 'title',
+        rating: 'rating',
+        release_year: 'release_year',
+        created_at: 'created_at',
+        updated_at: 'updated_at'
+    };
+
+    const column = allowedColumns[params.sort] || 'id';
+
+    const direction = 
+        params.order?.toLowerCase() === 'asc'
+            ? 'ASC'
+            : 'DESC';
+
+    sql += `
+        ORDER BY ${column} ${direction}
+    `;
+
+    return db.prepare(sql).all(...values);
 };
 
 const getStats = () => {
@@ -215,5 +295,6 @@ module.exports = {
     search,
     filter,
     getSorted,
+    query,
     getStats
 };

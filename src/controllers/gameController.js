@@ -3,31 +3,25 @@ const gameService = require('../services/gameService');
 const { validateGame } = require('../validators/gameValidator');
 
 const getAllGames = (req, res) => {
-    const { q, status, genre, platform, sort, order } = req.query;
+    const {
+        q,
+        status,
+        genre,
+        platform,
+        rating,
+        sort,
+        order
+    } = req.query;
 
-    if (q) {
-        const games = gameService.searchGames(q);
-
-        return res.status(200).json(games);
-    }
-
-    if (status || genre || platform) {
-        const games = gameService.filterGames({
-            status,
-            genre,
-            platform
-        });
-
-        return res.status(200).json(games);
-    }
-
-    if (sort || order) {
-        const games = gameService.sortGames(sort, order);
-
-        return res.status(200).json(games);
-    }
-
-    const games = gameService.getAllGames();
+    const games = gameService.queryGames({
+        q,
+        status,
+        genre,
+        platform,
+        rating,
+        sort,
+        order
+    });
 
     res.status(200).json(games);
 };
