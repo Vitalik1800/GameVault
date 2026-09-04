@@ -96,8 +96,14 @@ const search = (query) => {
         SELECT * 
         FROM games
         WHERE title LIKE ?
+        OR genre LIKE ?
+        OR platform LIKE ?
         ORDER BY id DESC
-    `).all(`%${query}%`);
+    `).all(
+        `%${query}%`,
+        `%${query}%`,
+        `%${query}%`
+    );
 };
 
 const filter = (filters) => {

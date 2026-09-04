@@ -1,5 +1,7 @@
 const gameLibrary = document.getElementById('game_library');
 
+const searchInput = document.getElementById('search_input');
+
 const addGameButton = document.getElementById('add_game_button');
 const addGameModal = document.getElementById('add_game_modal');
 const addGameForm = document.getElementById('add_game_form');
@@ -52,6 +54,7 @@ const updateGameButton = document.getElementById(
 );
 
 let editingGameId = null;
+let searchTimeout = null;
 
 const openAddGameModal = () => {
     addGameModal.classList.add('active');
@@ -216,6 +219,19 @@ const showErrorState = () => {
     `;
 };
 
+const showSearchErrorState = () => {
+    gameLibrary.innerHTML = `
+        <div class="error_state">
+            <h3 class="error_state_title">
+                Failed to search games
+            </h3>
+            <p class="error_state_description">
+                Something went wrong while searching your game library.
+            </p>
+        </div>
+    `;
+};
+
 const showEditFormError = (message) => {
     editFormMessage.textContent = message;
     editFormMessage.className = 'form_message error';
@@ -301,7 +317,27 @@ const loadGames = async () => {
     }
 };
 
-const renderGames = (games) => {
+const searchGames = async (query) => {
+    try {
+        const response = await fetch(
+            `/api/games?q=${encodeURIComponent(query)}`
+        );
+
+        if (!response.ok) {
+            throw new Error('Failed to search games');
+        }
+
+        const games = await response.json();
+
+        renderGames(games, query);
+    } catch (error) {
+        console.error('Failed to search games: ', error);
+
+        showSearchErrorState();
+    }
+};
+
+const renderGames = (games, searchQuery = '') => {
     gameLibrary.innerHTML = '';
 
     if (games.length === 0) {
@@ -309,12 +345,21 @@ const renderGames = (games) => {
 
         emptyState.className = 'empty_state';
 
-        emptyState.innerHTML = `
-            <h3 class="empty_state_title">No games found</h3>
-            <p class="empty_state_description">
-                Your game library is empty.
-            </p>
-        `;
+        if (searchQuery) {
+            emptyState.innerHTML = `
+                <h3 class="empty_state_title">No games found</h3>
+                <p class="empty_state_description">
+                    No games match "${searchQuery}".
+                </p>
+            `;
+        } else {
+            emptyState.innerHTML = `
+                <h3 class="empty_state_title">No games found</h3>
+                <p class="empty_state_description">
+                    Your game library is empty.
+                </p>
+            `;
+        }
 
         gameLibrary.appendChild(emptyState);
 
@@ -379,6 +424,16 @@ const renderGames = (games) => {
 };
 
 loadGames();
+
+searchInput.addEventListener('input', (event) => {
+    const query = event.target.value.trim();
+
+    clearTimeout(searchTimeout);
+
+    searchTimeout = setTimeout(() => {
+        searchGames(query);
+    }, 300);
+});
 
 addGameButton.addEventListener('click', openAddGameModal);
 

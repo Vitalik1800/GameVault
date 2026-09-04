@@ -262,6 +262,10 @@ button {
     color: #111827;
     font-size: 14px;
     outline: none;
+
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
 }
 
 .search_input::placeholder {
@@ -837,6 +841,10 @@ button {
 
     .search_container {
         max-width: none;
+    }
+
+    .search_input {
+        height: 44px;
     }
 
     .add_game_button {
