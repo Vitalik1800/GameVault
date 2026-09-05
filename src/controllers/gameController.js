@@ -119,7 +119,42 @@ const getStats = (req, res) => {
     const stats = gameService.getStats();
 
     res.status(200).json(stats);
-}
+};
+
+const getWishlistGames = (req, res) => {
+    const games = gameService.getWishlist();
+
+    res.status(200).json(games);
+};
+
+const updateWishlist = (req, res) => {
+    const id = Number(req.params.id);
+
+    const { isWishlist } = req.body;
+
+    if (typeof isWishlist !== 'boolean') {
+        return res.status(400).json({
+            error: {
+                message: 'isWishlist must be a boolean'
+            }
+        });
+    }
+
+    const game = gameService.setWishlist(
+        id,
+        isWishlist
+    );
+
+    if (!game) {
+        return res.status(404).json({
+            error: {
+                message: 'Game not found'
+            }
+        });
+    }
+
+    res.status(200).json(game);
+};
 
 module.exports = {
     getAllGames,
@@ -128,5 +163,7 @@ module.exports = {
     updateGame,
     deleteGame,
     getAllGames,
-    getStats
+    getStats,
+    getWishlistGames,
+    updateWishlist
 };

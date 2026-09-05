@@ -286,6 +286,33 @@ const getStats = () => {
     };
 };
 
+const getWishlist = () => {
+    return db.prepare(`
+        SELECT *
+        FROM games
+        WHERE is_wishlist = 1
+        ORDER BY id DESC
+    `).all();
+};
+
+const setWishlist = (id, isWishlist) => {
+    const result = db.prepare(`
+        UPDATE games
+        SET is_wishlist = ?,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+    `).run(
+        isWishlist ? 1 : 0,
+        id
+    );
+
+    if (result.changes === 0) {
+        return null;
+    }
+
+    return getById(id);
+};
+
 module.exports = {
     getAll,
     getById,
@@ -296,5 +323,7 @@ module.exports = {
     filter,
     getSorted,
     query,
-    getStats
+    getStats,
+    getWishlist,
+    setWishlist
 };

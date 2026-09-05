@@ -36,26 +36,31 @@
                     <div class="navigation_section">
                         <span class="navigation_title">Main</span>
 
-                        <a href="#" class="nav_item active">
+                        <a href="" class="nav_item active" id="dashboard_nav_item">
                             <span class="nav_icon">⌂</span>
                             <span class="nav_label">Dashboard</span>
                         </a>
 
-                        <a href="#" class="nav_item">
+                        <a href="" class="nav_item" id="library_nav_item">
                             <span class="nav_icon">▣</span>
                             <span class="nav_label">Library</span>
                         </a>
 
-                        <a href="#" class="nav_item">
+                        <a href="" class="nav_item" id="add_game_nav_item">
                             <span class="nav_icon">+</span>
                             <span class="nav_label">Add Game</span>
+                        </a>
+
+                        <a href="#" class="nav_item" id="wishlist_nav_item">
+                            <span class="nav_icon">♡</span>
+                            <span class="nav_label">Wishlist</span>
                         </a>
                     </div>
 
                     <div class="navigation_section">
                         <span class="navigation_title">Other</span>
 
-                        <a href="#" class="nav_item">
+                        <a href="#" class="nav_item" id="settings_nav_item">
                             <span class="nav_icon">⚙</span>
                             <span class="nav_label">Settings</span>
                         </a>
@@ -81,23 +86,68 @@
                     <div class="stats_grid">
 
                         <div class="stat_card">
-                            <span class="stat_label">Total Games</span>
-                            <span class="stat_value"></span>
+                            <span class="stat_label">
+                                Total Games
+                            </span>
+                            
+                            <span 
+                                class="stat_value"
+                                id="total_games_stat"
+                            >
+                                
+                            </span>
                         </div>
 
                         <div class="stat_card">
-                            <span class="stat_label">Completed</span>
-                            <span class="stat_value"></span>
+                            <span class="stat_label">
+                                Completed
+                            </span>
+
+                            <span 
+                                class="stat_value"
+                                id="completed_games_stat"
+                            >
+                                
+                            </span>
                         </div>
 
                         <div class="stat_card">
-                            <span class="stat_label">Playing</span>
-                            <span class="stat_value"></span>
+                            <span class="stat_label">
+                                Playing
+                            </span>
+
+                            <span 
+                                class="stat_value"
+                                id="playing_games_stat"
+                            >
+                                
+                            </span>
                         </div>
 
                         <div class="stat_card">
-                            <span class="stat_label">Average Rating</span>
-                            <span class="stat_value"></span>
+                            <span class="stat_label">
+                                Backlog
+                            </span>
+
+                            <span 
+                                class="stat_value"
+                                id="backlog_games_stat"
+                            >
+                                
+                            </span>
+                        </div>
+
+                        <div class="stat_card">
+                            <span class="stat_label">
+                                Average Rating
+                            </span>
+
+                            <span 
+                                class="stat_value"
+                                id="average_rating_stat"
+                            >
+                                
+                            </span>
                         </div>
 
                     </div>
@@ -209,6 +259,20 @@
                         
                     </div>
 
+                </section>
+
+                <section class="wishlist" id="wishlist_section">
+                    <div class="wishlist_header">
+                        <div>
+                            <h2>Wishlist</h2>
+                            <p class="wishlist_description">
+                                Games you want to play later.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="wishlist_library" id="wishlist_library">
+                    </div>
                 </section>
 
             </main>

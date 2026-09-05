@@ -65,6 +65,17 @@ const getStats = () => {
     };
 };
 
+const getWishlist = () => {
+    return gameRepository.getWishlist();
+};
+
+const setWishlist = (id, isWishlist) => {
+    return gameRepository.setWishlist(
+        id,
+        isWishlist
+    );
+};
+
 module.exports = {
     getAllGames,
     getGameById,
@@ -75,5 +86,7 @@ module.exports = {
     filterGames,
     sortGames,
     queryGames,
-    getStats
+    getStats,
+    getWishlist,
+    setWishlist
 };

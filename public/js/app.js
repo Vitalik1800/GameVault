@@ -1,5 +1,53 @@
 const gameLibrary = document.getElementById('game_library');
 
+const totalGamesStat = document.getElementById(
+    'total_games_stat'
+);
+
+const completedGamesStat = document.getElementById(
+    'completed_games_stat'
+);
+
+const playingGamesStat = document.getElementById(
+    'playing_games_stat'
+);
+
+const backlogGamesStat = document.getElementById(
+    'backlog_games_stat'
+);
+
+const averageRatingStat = document.getElementById(
+    'average_rating_stat'
+);
+
+const wishlistSection = document.getElementById(
+    'wishlist_section'
+);
+
+const wishlistLibrary = document.getElementById(
+    'wishlist_library'
+);
+
+const wishlistNavItem = document.getElementById(
+    'wishlist_nav_item'
+);
+
+const dashboardNavItem = document.getElementById(
+    'dashboard_nav_item'
+);
+
+const libraryNavItem = document.getElementById(
+    'library_nav_item'
+);
+
+const addGameNavItem = document.getElementById(
+    'add_game_nav_item'
+);
+
+const settingsNavItem = document.getElementById(
+    'settings_nav_item'
+);
+
 const searchInput = document.getElementById('search_input');
 
 const genreFilter = document.getElementById('genre_filter');
@@ -94,11 +142,38 @@ const updateGameButton = document.getElementById(
 let editingGameId = null;
 let searchTimeout = null;
 
+const sortMap = {
+    title_asc: {
+        sort: 'title',
+        order: 'asc'
+    },
+    title_desc: {
+        sort: 'title',
+        order: 'desc'
+    },
+    rating_asc: {
+        sort: 'rating',
+        order: 'asc'
+    },
+    rating_desc: {
+        sort: 'rating',
+        order: 'desc'
+    },
+    release_year_asc: {
+        sort: 'release_year',
+        order: 'asc'
+    },
+    release_year_desc: {
+        sort: 'release_year',
+        order: 'desc'
+    }
+};
+
 const defaultSettings = {
     theme: 'light',
     showCovers: true,
     compactCards: false
-}
+};
 
 let settings = {
     ...defaultSettings
@@ -174,60 +249,66 @@ const closeAddGameModal = () => {
     addGameModal.classList.remove('active');
 };
 
-const createGame = async (gameData) => {
-    const response = await fetch('/api/games', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(gameData)
-    });
+const apiRequest = async (
+    url,
+    options = {},
+    errorMessage = 'Request failed'
+) => {
+    const response = await fetch(url, options);
 
     if (!response.ok) {
-        throw new Error('Failed to create game');
-    }
-
-    return response.json();
-};
-
-const updateGame = async (gameId, gameData) => {
-    const response = await fetch(`/api/games/${gameId}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(gameData)
-    });
-
-    if (!response.ok) {
-        throw new Error('Failed to update game');
-    }
-
-    return response.json();
-};
-
-const getGameById = async (gameId) => {
-    const response = await fetch(`/api/games/${gameId}`);
-
-    if (!response.ok) {
-        throw new Error('Failed to load game');
-    }
-
-    return response.json();
-};
-
-const deleteGame = async (gameId) => {
-    const response = await fetch(`/api/games/${gameId}`, {
-        method: 'DELETE'
-    });
-
-    if (!response.ok) {
-        throw new Error('Failed to delete game');
+        throw new Error(errorMessage);
     }
 
     return response.status === 204
         ? null
         : response.json();
+};
+
+const createGame = (gameData) => {
+    return apiRequest(
+        '/api/games',
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(gameData)
+        },
+        'Failed to create game'
+    );
+};
+
+const updateGame = (gameId, gameData) => {
+    return apiRequest(
+        `/api/games/${gameId}`,
+        {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(gameData)
+        },
+        'Failed to update game'
+    );
+};
+
+const getGameById = (gameId) => {
+    return apiRequest(
+        `/api/games/${gameId}`,
+        {},
+        'Failed to load game'
+    );
+};
+
+const deleteGame = (gameId) => {
+    return apiRequest(
+        `/api/games/${gameId}`,
+        {
+            method: 'DELETE'
+        },
+        'Failed to delete game'
+    );
 };
 
 const validateGameData = (gameData) => {
@@ -284,6 +365,23 @@ const validateGameData = (gameData) => {
     return errors;
 };
 
+const getGameFormData = (form) => {
+    const formData = new FormData(form);
+
+    return {
+        title: formData.get('title'),
+        description: formData.get('description'),
+        genre: formData.get('genre'),
+        platform: formData.get('platform'),
+        status: formData.get('status'),
+        rating: formData.get('rating')
+            ? Number(formData.get('rating'))
+            : null,
+        release_year: Number(formData.get('release_year')),
+        cover_url: formData.get('cover_url')
+    };
+};
+
 const showFormLoading = () => {
     saveGameButton.disabled = true;
     saveGameButton.textContent = 'Saving...';
@@ -297,9 +395,9 @@ const showFormSuccess = () => {
     formMessage.className = 'form_message success';
 };
 
-const showFormError = (message) => {
-    formMessage.textContent = message;
-    formMessage.className = 'form_message error';
+const showFormError = (messageElement, message) => {
+    messageElement.textContent = message;
+    messageElement.className = 'form_message error';
 };
 
 const resetFormState = () => {
@@ -329,31 +427,24 @@ const showErrorState = () => {
     `;
 };
 
-const showSearchErrorState = () => {
-    gameLibrary.innerHTML = `
+const showWishlistErrorState = () => {
+    wishlistLibrary.innerHTML = `
         <div class="error_state">
             <h3 class="error_state_title">
-                Failed to search games
+                Failed to load wishlist
             </h3>
+
             <p class="error_state_description">
-                Something went wrong while searching your game library.
+                Something went wrong while loading your wishlist.
             </p>
         </div>
     `;
 };
 
-const showEditFormError = (message) => {
-    editFormMessage.textContent = message;
-    editFormMessage.className = 'form_message error';
-};
-
 const openEditGame = async (gameId) => {
-    console.log('Edit game: ', gameId);
 
     try {
         const game = await getGameById(gameId);
-
-        console.log('Game to edit: ', game);
 
         editingGameId = game.id;
 
@@ -380,7 +471,6 @@ const openDeleteGame = async (gameId, deleteButton) => {
     );
 
     if (!confirmed) {
-        console.log('Delete cancelled: ', gameId);
         return;
     }
 
@@ -390,9 +480,8 @@ const openDeleteGame = async (gameId, deleteButton) => {
 
         await deleteGame(gameId);
 
-        console.log('Game deleted: ', gameId);
+        await refreshGameData();
 
-        await loadGamesWithControls();
     } catch (error) {
         console.error('Failed to delete game: ', error);
 
@@ -409,171 +498,21 @@ const closeEditGameModal = () => {
 
 const openSettingsModal = () => {
     settingsModal.classList.add('active');
-}
+};
 
 const closeSettingsModal = () => {
     settingsModal.classList.remove('active');
 }
 
-const loadGames = async () => {
-    showLoadingState();
-
-    try {
-        const response = await fetch('/api/games');
-
-        if (!response.ok) {
-            throw new Error('Failed to load games');
-        }
-
-        const games = await response.json();
-
-        renderGames(games);
-    } catch (error) {
-        console.error('Failed to load games: ', error);
-
-        showErrorState();
+const setQueryParam = (params, key, value) => {
+    if (value) {
+        params.set(key, value);
     }
 };
 
-const sortGamesByTitleAsc = async () => {
-    try {
-        const response = await fetch(
-            `/api/games?sort=title&order=asc`
-        );
-
-        if (!response.ok) {
-            throw new Error('Failed to sort games by title');
-        }
-
-        const games = await response.json();
-
-        renderGames(games);
-    } catch (error) {
-        console.error(
-            'Failed to sort games by title: ',
-            error
-        );
-
-        showErrorState();
-    }
-}; 
-
-const sortGamesByTitleDesc = async () => {
-    try {
-        const response = await fetch(
-            `/api/games?sort=title&order=desc`
-        );
-
-        if (!response.ok) {
-            throw new Error('Failed to sort games by title');
-        }
-
-        const games = await response.json();
-
-        renderGames(games);
-    } catch (error) {
-        console.error(
-            'Failed to sort games by title: ',
-            error
-        );
-
-        showErrorState();
-    }
-}; 
-
-const sortGamesByRatingAsc = async () => {
-    try {
-        const response = await fetch(
-            `/api/games?sort=rating&order=asc`
-        );
-
-        if (!response.ok) {
-            throw new Error('Failed to sort games by rating');
-        }
-
-        const games = await response.json();
-
-        renderGames(games);
-    } catch (error) {
-        console.error(
-            'Failed to sort games by rating: ',
-            error
-        );
-
-        showErrorState();
-    }
-}; 
-
-const sortGamesByRatingDesc = async () => {
-    try {
-        const response = await fetch(
-            `/api/games?sort=rating&order=desc`
-        );
-
-        if (!response.ok) {
-            throw new Error('Failed to sort games by rating');
-        }
-
-        const games = await response.json();
-
-        renderGames(games);
-    } catch (error) {
-        console.error(
-            'Failed to sort games by rating: ',
-            error
-        );
-
-        showErrorState();
-    }
-}; 
-
-const sortGamesByReleaseYearAsc = async () => {
-    try {
-        const response = await fetch(
-            `/api/games?sort=release_year&order=asc`
-        );
-
-        if (!response.ok) {
-            throw new Error('Failed to sort games by release year');
-        }
-
-        const games = await response.json();
-
-        renderGames(games);
-    } catch (error) {
-        console.error(
-            'Failed to sort games by release year: ',
-            error
-        );
-
-        showErrorState();
-    }
-}; 
-
-const sortGamesByReleaseYearDesc = async () => {
-    try {
-        const response = await fetch(
-            `/api/games?sort=release_year&order=desc`
-        );
-
-        if (!response.ok) {
-            throw new Error('Failed to sort games by release year');
-        }
-
-        const games = await response.json();
-
-        renderGames(games);
-    } catch (error) {
-        console.error(
-            'Failed to sort games by release year: ',
-            error
-        );
-
-        showErrorState();
-    }
-}; 
-
 const loadGamesWithControls = async () => {
+    showLoadingState();
+
     try {
         const params = new URLSearchParams();
 
@@ -584,53 +523,13 @@ const loadGamesWithControls = async () => {
         const rating = ratingFilter.value;
         const sortValue = sortFilter.value;
 
-        if (query) {
-            params.set('q', query);
-        }
-
-        if (genre) {
-            params.set('genre', genre);
-        }
-
-        if (platform) {
-            params.set('platform', platform);
-        }
-
-        if (status) {
-            params.set('status', status);
-        }
-
-        if (rating) {
-            params.set('rating', rating);
-        }
-
+        setQueryParam(params, 'q', query);
+        setQueryParam(params, 'genre', genre);
+        setQueryParam(params, 'platform', platform);
+        setQueryParam(params, 'status', status);
+        setQueryParam(params, 'rating', rating);
+        
         if (sortValue) {
-            const sortMap = {
-                title_asc: {
-                    sort: 'title',
-                    order: 'asc'
-                },
-                title_desc: {
-                    sort: 'title',
-                    order: 'desc'
-                },
-                rating_asc: {
-                    sort: 'rating',
-                    order: 'asc'
-                },
-                rating_desc: {
-                    sort: 'rating',
-                    order: 'desc'
-                },
-                release_year_asc: {
-                    sort: 'release_year',
-                    order: 'asc'
-                },
-                release_year_desc: {
-                    sort: 'release_year',
-                    order: 'desc'
-                }
-            };
 
             const selectedSort = sortMap[sortValue];
 
@@ -646,15 +545,11 @@ const loadGamesWithControls = async () => {
             ? `/api/games?${queryString}`
             : '/api/games';
 
-        const response = await fetch(url);
-
-        if (!response.ok) {
-            throw new Error(
-                'Failed to load games with controls'
-            );
-        }
-    
-        const games = await response.json();
+        const games = await apiRequest(
+            url,
+            {},
+            'Failed to load games with controls'
+        );
 
         renderGames(games, query);
 
@@ -668,74 +563,293 @@ const loadGamesWithControls = async () => {
     }
 };
 
-const loadGenreOptions = async () => {
+const getUniqueSortedValues = (games, key) => {
+    return [
+        ...new Set(
+            games
+                .map((game) => game[key])
+                .filter(Boolean)
+        )
+    ].sort();
+};
+
+const populateSelect = (
+    select,
+    defaultLabel,
+    values
+) => {
+    select.innerHTML = `
+        <option value="">${defaultLabel}</option>
+    `;
+
+    values.forEach((value) => {
+        const option = document.createElement('option');
+
+        option.value = value;
+        option.textContent = value;
+
+        select.appendChild(option);
+    });
+};
+
+const loadFilterOptions = async () => {
     try {
-        const response = await fetch('/api/games');
+        const games = await apiRequest(
+            '/api/games',
+            {},
+            'Failed to load filter options'
+        );
 
-        if (!response.ok) {
-            throw new Error('Failed to load genres');
-        }
+        const genres = getUniqueSortedValues(
+            games,
+            'genre'
+        );
 
-        const games = await response.json();
+        const platforms = getUniqueSortedValues(
+            games,
+            'platform'
+        );
 
-        const genres = [
-            ...new Set(
-                games
-                    .map((game) => game.genre)
-                    .filter(Boolean)
-            )
-        ].sort();
+        populateSelect(
+            genreFilter,
+            'All genres',
+            genres
+        );
 
-        genreFilter.innerHTML = `
-            <option value="">All genres</option>
-        `;
+        populateSelect(
+            platformFilter,
+            'All platforms',
+            platforms
+        );
 
-        genres.forEach((genre) => {
-            const option = document.createElement('option');
-
-            option.value = genre;
-            option.textContent = genre;
-
-            genreFilter.appendChild(option);
-        });
     } catch (error) {
-        console.error('Failed to load genres: ', error);
+        console.error(
+            'Failed to load filter options: ',
+            error
+        );
     }
 };
 
-const loadPlatformOptions = async () => {
+const loadDashboardStats = async () => {
     try {
-        const response = await fetch('/api/games');
+        const stats = await apiRequest(
+            '/api/games/stats',
+            {},
+            'Failed to load dashboard statistics'
+        );
 
-        if (!response.ok) {
-            throw new Error('Failed to load platforms');
-        }
+        totalGamesStat.textContent = 
+            stats.totalGames;
 
-        const games = await response.json();
+        completedGamesStat.textContent = 
+            stats.byStatus.Completed || 0;
 
-        const platforms = [
-            ...new Set(
-                games
-                    .map((game) => game.platform)
-                    .filter(Boolean)
-            )
-        ].sort();
+        playingGamesStat.textContent = 
+            stats.byStatus.Playing || 0;
 
-        platformFilter.innerHTML = `
-            <option value="">All platforms</option>
+        backlogGamesStat.textContent = 
+            stats.byStatus.Backlog || 0;
+
+        averageRatingStat.textContent = 
+            stats.averageRating ?? 0;
+
+    } catch (error) {
+        console.error(
+            'Failed to load dashboard statistics: ',
+            error
+        );
+
+        totalGamesStat.textContent = '-';
+        completedGamesStat.textContent = '-';
+        playingGamesStat.textContent = '-';
+        backlogGamesStat.textContent = '-';
+        averageRatingStat.textContent = '-';
+    }
+};
+
+const refreshGameData = async () => {
+    await loadGamesWithControls();
+    await loadWishlist();
+    await loadDashboardStats();
+};
+
+const setActiveNavigation = (activeItem) => {
+    const navigationItems = document.querySelectorAll(
+        '.nav_item'
+    );
+
+    navigationItems.forEach((item) => {
+        item.classList.remove('active')
+    });
+
+    activeItem.classList.add('active');
+};
+
+const handleNavigation = (
+    event,
+    navigationItem,
+    action
+) => {
+    event.preventDefault();
+
+    setActiveNavigation(navigationItem);
+
+    action();
+};
+
+const loadWishlist = async () => {
+    try {
+        const games = await apiRequest(
+            '/api/games/wishlist',
+            {},
+            'Failed to load wishlist'
+        );
+
+        renderWishlist(games);
+    } catch (error) {
+        console.error(
+            'Failed to load wishlist: ',
+            error
+        );
+
+        showWishlistErrorState();
+    }
+};
+
+const renderWishlist = (games) => {
+    wishlistLibrary.innerHTML = '';
+
+    if (games.length === 0) {
+        wishlistLibrary.innerHTML = `
+            <div class="empty_state">
+                <h3 class="empty_state_title">
+                    Wishlist is empty
+                </h3>
+
+                <p class="empty_state_description">
+                    Add games to your wishlist to see them here.
+                </p>
+            </div>
         `;
 
-        platforms.forEach((platform) => {
-            const option = document.createElement('option');
-
-            option.value = platform;
-            option.textContent = platform;
-
-            platformFilter.appendChild(option);
-        });
-    } catch (error) {
-        console.error('Failed to load platforms: ', error);
+        return;
     }
+
+    games.forEach((game) => {
+        wishlistLibrary.appendChild(
+            createGameCard(game, true)
+        );
+    });
+};
+
+const updateWishlist = (gameId, isWishlist) => {
+    return apiRequest(
+        `/api/games/${gameId}/wishlist`,
+        {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                isWishlist
+            })
+        },
+        'Failed to update wishlist'
+    );
+};
+
+const createGameCard = (game, wishlistMode = false) => {
+    const card = document.createElement('article');
+
+    card.className = 'game_card';
+
+    const cover = settings.showCovers && game.cover_url
+        ? `
+            <img
+                class="game_cover"
+                src="${game.cover_url}"
+                alt="${game.title} cover"
+            >
+        `
+        : '';
+
+    card.innerHTML = `
+        ${cover}
+
+        <div class="game_content">
+            <h3 class="game_title">
+                ${game.title}
+            </h3>
+
+            <p class="game_info">
+                ${game.genre} · ${game.platform}
+            </p>
+
+            <p class="game_info">
+                Release year: ${game.release_year}
+            </p>
+
+            ${
+                game.rating !== null
+                    ? `
+                        <p class="game_rating">
+                            Rating: ${game.rating}/10
+                        </p>
+                    `
+                    : ''
+            }
+
+            ${
+                wishlistMode
+                    ? ''
+                    : `
+                        <span class="game_status">
+                            ${game.status}
+                        </span>
+                    `
+            }
+
+            <div class="game_actions">
+                <button
+                    type="button"
+                    class="edit_game_button"
+                    data-id="${game.id}"
+                >
+                    Edit
+                </button>
+
+                ${
+                    wishlistMode
+                        ? ''
+                        : `
+                            <button
+                                type="button"
+                                class="delete_game_button"
+                                data-id="${game.id}"
+                            >
+                                Delete
+                            </button>
+                        `
+                }
+
+                <button
+                    type="button"
+                    class="wishlist_game_button"
+                    data-id="${game.id}"
+                >
+                    ${
+                        wishlistMode
+                            ? 'Remove from Wishlist'
+                            : game.is_wishlist
+                                ? 'Remove from Wishlist'
+                                : 'Add to Wishlist'
+                    }
+                </button>
+            </div>
+        </div>
+    `;
+
+    return card;
 };
 
 const renderGames = (games, searchQuery = '') => {
@@ -768,67 +882,19 @@ const renderGames = (games, searchQuery = '') => {
     }
 
     games.forEach((game) => {
-        const card = document.createElement('div');
-
-        card.className = 'game_card';
-
-        const cover = game.cover_url 
-            ? ` <img
-                 class="game_cover"
-                 src="${game.cover_url}"
-                 alt="${game.title} cover"
-            >`
-            : '';
-
-        card.innerHTML = `
-            ${cover}
-
-            <div class="game_content">
-                <h3 class="game_title">${game.title}</h3>
-            
-                <p class="game_info">${game.genre}</p>
-            
-                <p class="game_info">${game.platform}</p>
-            
-                <p class="game_rating">
-                    ⭐ ${game.rating ?? '-'}/10
-                </p>
-            
-                <span class="game_status">
-                    ${game.status}
-                </span>
-
-                <div class="game_actions">
-
-                    <button
-                        type="button"
-                        class="edit_game_button"
-                        data-id="${game.id}"
-                    >
-                        Edit
-                    </button>
-
-                    <button
-                        type="button"
-                        class="delete_game_button"
-                        data-id="${game.id}"
-                    >
-                        Delete
-                    </button>
-
-                </div>
-            </div>
-        `;
-
-        gameLibrary.appendChild(card);
+        gameLibrary.appendChild(
+            createGameCard(game)
+        );
     });
 };
 loadSettings();
 applySettings();
 
-loadGames();
-loadGenreOptions();
-loadPlatformOptions();
+loadGamesWithControls();
+loadWishlist();
+
+loadFilterOptions();
+loadDashboardStats();
 
 searchInput.addEventListener('input', (event) => {
     clearTimeout(searchTimeout);
@@ -838,52 +904,28 @@ searchInput.addEventListener('input', (event) => {
     }, 300);
 });
 
-genreFilter.addEventListener('change', () => {
-    loadGamesWithControls();
-});
+genreFilter.addEventListener('change', loadGamesWithControls);
 
-platformFilter.addEventListener('change', () => {
-    loadGamesWithControls();
-});
+platformFilter.addEventListener('change', loadGamesWithControls);
 
-statusFilter.addEventListener('change', () => {
-    loadGamesWithControls();
-});
+statusFilter.addEventListener('change', loadGamesWithControls);
 
-ratingFilter.addEventListener('change', () => {
-    loadGamesWithControls();
-});
+ratingFilter.addEventListener('change', loadGamesWithControls);
 
-sortFilter.addEventListener('change', () => {
-    loadGamesWithControls();
-});
+sortFilter.addEventListener('change', loadGamesWithControls);
 
 addGameButton.addEventListener('click', openAddGameModal);
 
 addGameForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    const formData = new FormData(addGameForm);
-
-    const gameData = {
-        title: formData.get('title'),
-        description: formData.get('description'),
-        genre: formData.get('genre'),
-        platform: formData.get('platform'),
-        status: formData.get('status'),
-        rating: formData.get('rating')
-            ? Number(formData.get('rating'))
-            : null,
-        release_year: Number(formData.get('release_year')),
-        cover_url: formData.get('cover_url')
-    };
+    const gameData = getGameFormData(addGameForm);
 
     const errors = validateGameData(gameData);
 
     if (errors.length > 0) {
-        console.log('Validation errors: ', errors);
 
-        showFormError(errors.join(', '));
+        showFormError(formMessage, errors.join(', '));
 
         return;
     }
@@ -893,13 +935,12 @@ addGameForm.addEventListener('submit', async (event) => {
     try {
         const game = await createGame(gameData);
 
-        console.log('Game created: ', game);
-
         showFormSuccess();
 
         addGameForm.reset();
 
-        await loadGamesWithControls();
+        await loadFilterOptions();
+        await refreshGameData();
 
         setTimeout(() => {
             closeAddGameModal();
@@ -909,9 +950,7 @@ addGameForm.addEventListener('submit', async (event) => {
     } catch (error) {
         console.error('Failed to create game: ', error);
 
-        showFormError(
-            'Failed to create game. Please try again.'
-        );
+        showFormError(formMessage, 'Failed to create game. Please try again.');
 
         resetFormState();
     }
@@ -943,6 +982,27 @@ gameLibrary.addEventListener('click', async (event) => {
 
         await openDeleteGame(gameId, deleteButton);
     }
+
+    if (
+        event.target.classList.contains(
+            'wishlist_game_button'
+        )
+    ) {
+        const gameId = Number(
+            event.target.dataset.id
+        );
+
+        const game = await getGameById(gameId);
+
+        await updateWishlist(
+            gameId,
+            !game.is_wishlist
+        );
+
+        await refreshGameData();
+
+        return;
+    }
 });
 
 closeEditModalButton.addEventListener(
@@ -968,22 +1028,7 @@ editGameForm.addEventListener('submit', async (event) => {
         return;
     }
 
-    const formData = new FormData(editGameForm);
-
-    const gameData = {
-        title: formData.get('title'),
-        description: formData.get('description'),
-        genre: formData.get('genre'),
-        platform: formData.get('platform'),
-        status: formData.get('status'),
-        rating: formData.get('rating')
-            ? Number(formData.get('rating'))
-            : null,
-        release_year: Number(formData.get('release_year')),
-        cover_url: formData.get('cover_url')
-    };
-
-    console.log('Game update data: ', gameData);
+    const gameData = getGameFormData(editGameForm);
 
     try {
         updateGameButton.disabled = true;
@@ -994,13 +1039,11 @@ editGameForm.addEventListener('submit', async (event) => {
             gameData
         );
 
-        console.log('Game updated: ', game);
-
         closeEditGameModal();
 
         editingGameId = null;
 
-        await loadGamesWithControls();
+        await refreshGameData();
 
         updateGameButton.disabled = false;
         updateGameButton.textContent = 'Update';
@@ -1010,43 +1053,33 @@ editGameForm.addEventListener('submit', async (event) => {
         updateGameButton.disabled = false;
         updateGameButton.textContent = 'Update';
 
-        showEditFormError(
-            'Failed to update game. Please try again.'
-        );
+        showFormError(editFormMessage, 'Failed to update game. Please try again.');
     }
 });
 
-settingsButton.addEventListener('click', () => {
-    openSettingsModal();
-});
+settingsButton.addEventListener('click', openSettingsModal);
 
-closeSettingsModalButton.addEventListener('click', () => {
-    closeSettingsModal();
-});
+closeSettingsModalButton.addEventListener('click', closeSettingsModal);
 
-settingsModalOverlay.addEventListener('click', () => {
-    closeSettingsModal();
-});
+settingsModalOverlay.addEventListener('click', closeSettingsModal);
 
-themeSetting.addEventListener('change', (event) => {
-    settings.theme = event.target.value;
+const updateSetting = (key, value) => {
+    settings[key] = value;
 
     saveSettings();
     applySettings();
+};
+
+themeSetting.addEventListener('change', (event) => {
+    updateSetting('theme', event.target.value);
 });
 
 showCoversSetting.addEventListener('change', (event) => {
-    settings.showCovers = event.target.checked;
-
-    saveSettings();
-    applySettings();
+    updateSetting('showCovers', event.target.checked);
 });
 
 compactCardsSetting.addEventListener('change', (event) => {
-    settings.compactCards = event.target.checked;
-
-    saveSettings();
-    applySettings();
+    updateSetting('compactCards', event.target.checked);
 });
 
 resetSettingsButton.addEventListener('click', () => {
@@ -1056,4 +1089,132 @@ resetSettingsButton.addEventListener('click', () => {
 
     saveSettings();
     applySettings();
+});
+
+wishlistNavItem.addEventListener(
+    'click',
+    (event) => {
+        handleNavigation(
+            event,
+            wishlistNavItem,
+            () => {
+                wishlistSection.scrollIntoView({
+                    behavior: 'smooth'
+                });
+
+                loadWishlist();
+            }
+        );
+    }
+);
+
+dashboardNavItem.addEventListener(
+    'click',
+    (event) => {
+        handleNavigation(
+            event,
+            dashboardNavItem,
+            () => {
+                document.querySelector('.dashboard')
+                    .scrollIntoView({
+                        behavior: 'smooth'
+                    });
+            }
+        );
+    }
+);
+
+libraryNavItem.addEventListener(
+    'click',
+    (event) => {
+        handleNavigation(
+            event,
+            libraryNavItem,
+            () => {
+                document.querySelector('.library')
+                    .scrollIntoView({
+                        behavior: 'smooth'
+                    });
+            }
+        );
+    }
+);
+
+addGameNavItem.addEventListener(
+    'click',
+    (event) => {
+        handleNavigation(
+            event,
+            addGameNavItem,
+            openAddGameModal
+        );
+    }
+);
+
+settingsNavItem.addEventListener(
+    'click',
+    (event) => {
+        handleNavigation(
+            event,
+            settingsNavItem,
+            openSettingsModal
+        );
+    }
+);
+
+wishlistLibrary.addEventListener(
+    'click',
+    async (event) => {
+        const editButton =
+            event.target.closest(
+                '.edit_game_button'
+            );
+
+        const wishlistButton =
+            event.target.closest(
+                '.wishlist_game_button'
+            );
+
+        if (editButton) {
+            const gameId = Number(
+                editButton.dataset.id
+            );
+
+            await openEditGame(gameId);
+
+            return;
+        }
+
+        if (wishlistButton) {
+            const gameId = Number(
+                wishlistButton.dataset.id
+            );
+
+            try {
+                wishlistButton.disabled = true;
+
+                await updateWishlist(
+                    gameId,
+                    false
+                );
+
+                await refreshGameData();
+            } catch (error) {
+                console.error(
+                    'Failed to remove game from wishlist: ',
+                    error
+                );
+            }
+        }
+    }
+);
+
+document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') {
+        return;
+    }
+
+    closeAddGameModal();
+    closeEditGameModal();
+    closeSettingsModal();
 });
