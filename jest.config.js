@@ -2,5 +2,6 @@ module.exports = {
     testEnvironment: 'node',
     roots: ['<rootDir>/tests'],
     testMatch: ['**/*.test.js'],
-    clearMocks: true
+    clearMocks: true,
+    setupFiles: ['<rootDir>/tests/setup.js']
 }

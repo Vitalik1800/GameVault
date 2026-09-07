@@ -58,10 +58,17 @@ const validateGame = (game) => {
 
     if (
         game.cover_url !== undefined &&
-        game.cover_url !== null &&
-        typeof game.cover_url !== 'string'
+        game.cover_url !== null
     ) {
-        errors.push('cover_url must be a string');
+        if (typeof game.cover_url !== 'string') {
+            errors.push('cover_url must be a string');
+        } else {
+            try {
+                new URL(game.cover_url);
+            } catch {
+                errors.push('cover_url must be a valid URL');
+            }
+        }
     }
 
     return errors;

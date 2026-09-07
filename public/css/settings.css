@@ -1,0 +1,226 @@
+.settings_content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.settings_section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 18px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #ffffff;
+}
+
+.settings_section_header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.settings_section_title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.settings_section_description {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #6b7280;
+}
+
+.settings_item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding-top: 4px;
+}
+
+.settings_item_info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.settings_item_title {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #374151;
+}
+
+.settings_item_description {
+    font-size: 13px;
+    line-height: 1.4;
+    color: #6b7280;
+}
+
+.settings_select {
+    width: 140px;
+    height: 38px;
+    padding: 0 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #111827;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.settings_select:hover {
+    border-color: #9ca3af;
+}
+
+.settings_select:focus {
+    border-color: #6b7280;
+    box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.12);
+}
+
+.settings_about {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.settings_about_name {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #374151;
+}
+
+.settings_about_version {
+    font-size: 13px;
+    line-height: 1.4;
+    color: #6b7280;
+}
+
+.settings_switch {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    width: 42px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.settings_switch input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.settings_switch_slider {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: #d1d5db;
+    transition: background-color 0.15s ease;
+}
+
+.settings_switch_slider::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    top: 3px;
+    left: 3px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(17, 24, 39, 0.2);
+    transition: transform 0.15s ease;
+}
+
+.settings_switch input:checked + .settings_switch_slider {
+    background: #374151;
+}
+
+.settings_switch input:checked + .settings_switch_slider::before {
+    transform: translateX(18px);
+}
+
+.settings_actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.reset_settings_button {
+    height: 38px;
+    padding: 0 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #374151;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        border-color 0.15s ease,
+        background-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.reset_settings_button:hover {
+    border-color: #9ca3af;
+    background: #f3f4f6;
+    color: #111827;
+}
+
+.reset_settings_button:active {
+    background: #e5e7eb;
+    border-color: #9ca3af;
+    transform: translateY(1px);
+}
+
+.reset_settings_button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+body.dark_theme .settings_section {
+    background: #1f2937;
+    border-color: #374151;
+}
+
+body.dark_theme .settings_section_title,
+body.dark_theme .settings_item_title,
+body.dark_theme .settings_about_name {
+    color: #f9fafb;
+}
+
+body.dark_theme .settings_section_description,
+body.dark_theme .settings_item_description,
+body.dark_theme .settings_about_version {
+    color: #9ca3af;
+}
+
+body.dark_theme .settings_select {
+    background: #111827;
+    border-color: #4b5563;
+    color: #f9fafb;
+}
+
+body.dark_theme .reset_settings_button {
+    background: #1f2937;
+    border-color: #4b5563;
+    color: #d1d5db;
+}
+
+body.dark_theme .reset_settings_button:hover {
+    background: #374151;
+}
