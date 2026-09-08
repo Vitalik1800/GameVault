@@ -6,7 +6,19 @@ const apiRequest = async (
     const response = await fetch(url, options);
 
     if (!response.ok) {
-        throw new Error(errorMessage);
+        const errorData = await response.json().catch(
+            () => null
+        );
+
+        console.error(
+            'API error:',
+            response.status,
+            errorData
+        );
+
+        throw new Error(
+            errorData?.error || errorMessage
+        );
     }
 
     return response.status === 204

@@ -69,7 +69,7 @@ const getGameFormData = (form) => {
 
     return {
         title: formData.get('title'),
-        description: formData.get('description'),
+        description: formData.get('description')?.trim() || null,
         genre: formData.get('genre'),
         platform: formData.get('platform'),
         status: formData.get('status'),
@@ -77,7 +77,7 @@ const getGameFormData = (form) => {
             ? Number(formData.get('rating'))
             : null,
         release_year: Number(formData.get('release_year')),
-        cover_url: formData.get('cover_url')
+        cover_url: formData.get('cover_url')?.trim() || null
     };
 };
 
