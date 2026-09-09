@@ -1,0 +1,81 @@
+.wishlist {
+    margin-top: 36px;
+}
+
+.wishlist_header {
+    margin-bottom: 20px;
+}
+
+.wishlist_header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #111827;
+}
+
+.wishlist_description {
+    margin: 6px 0 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #6b7280;
+}
+
+.wishlist_library {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.wishlist_game_button {
+    flex: 1;
+    min-width: 0;
+    padding: 9px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+    cursor: pointer;
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease,
+        transform 0.15s ease;
+}
+
+.wishlist_game_button:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+.wishlist_game_button:active {
+    background: #e5e7eb;
+    transform: translateY(1px);
+}
+
+body.dark_theme .wishlist_header h2 {
+    color: #f9fafb;
+}
+
+body.dark_theme .wishlist_description {
+    color: #9ca3af;
+}
+
+body.dark_theme .wishlist_game_button {
+    background: #1f2937;
+    border-color: #4b5563;
+    color: #d1d5db;
+}
+
+body.dark_theme .wishlist_game_button:hover {
+    background: #374151;
+    border-color: #6b7280;
+    color: #ffffff;
+}
+
+body.dark_theme .wishlist_game_button:active {
+    background: #4b5563;
+}

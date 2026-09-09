@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameVault</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/library.css">
+    <link rel="stylesheet" href="css/modals.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/wishlist.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    
+    <div class="app">
+
+        <header class="header">
+            <div class="header_content">
+                
+                <div class="header_brand">
+                    <h1 class="logo">GameVault</h1>
+                    <span class="header_subtitle">Game Library</span>
+                </div>
+
+                <div class="header_actions">
+                    <button class="header_button" id="settings_button" type="button">
+                        Settings
+                    </button>
+                </div>
+
+            </div>
+        </header>
+
+        <div class="app_body">
+
+            <aside class="sidebar">
+
+                <nav class="navigation">
+                    
+                    <div class="navigation_section">
+                        <span class="navigation_title">Main</span>
+
+                        <a href="" class="nav_item active" id="dashboard_nav_item">
+                            <span class="nav_icon">⌂</span>
+                            <span class="nav_label">Dashboard</span>
+                        </a>
+
+                        <a href="" class="nav_item" id="library_nav_item">
+                            <span class="nav_icon">▣</span>
+                            <span class="nav_label">Library</span>
+                        </a>
+
+                        <a href="" class="nav_item" id="add_game_nav_item">
+                            <span class="nav_icon">+</span>
+                            <span class="nav_label">Add Game</span>
+                        </a>
+
+                        <a href="#" class="nav_item" id="wishlist_nav_item">
+                            <span class="nav_icon">♡</span>
+                            <span class="nav_label">Wishlist</span>
+                        </a>
+                    </div>
+
+                    <div class="navigation_section">
+                        <span class="navigation_title">Other</span>
+
+                        <a href="#" class="nav_item" id="settings_nav_item">
+                            <span class="nav_icon">⚙</span>
+                            <span class="nav_label">Settings</span>
+                        </a>
+                    </div>
+
+                </nav>
+
+            </aside>
+
+            <main class="main_content">
+
+                <section class="dashboard">
+                    
+                    <div class="dashboard_header">
+                        <div>
+                            <h2>Dashboard</h2>
+                            <p class="dashboard_description">
+                                Overview of your game library
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="stats_grid">
+
+                        <div class="stat_card">
+                            <span class="stat_label">
+                                Total Games
+                            </span>
+                            
+                            <span 
+                                class="stat_value"
+                                id="total_games_stat"
+                            >
+                                
+                            </span>
+                        </div>
+
+                        <div class="stat_card">
+                            <span class="stat_label">
+                                Completed
+                            </span>
+
+                            <span 
+                                class="stat_value"
+                                id="completed_games_stat"
+                            >
+                                
+                            </span>
+                        </div>
+
+                        <div class="stat_card">
+                            <span class="stat_label">
+                                Playing
+                            </span>
+
+                            <span 
+                                class="stat_value"
+                                id="playing_games_stat"
+                            >
+                                
+                            </span>
+                        </div>
+
+                        <div class="stat_card">
+                            <span class="stat_label">
+                                Backlog
+                            </span>
+
+                            <span 
+                                class="stat_value"
+                                id="backlog_games_stat"
+                            >
+                                
+                            </span>
+                        </div>
+
+                        <div class="stat_card">
+                            <span class="stat_label">
+                                Average Rating
+                            </span>
+
+                            <span 
+                                class="stat_value"
+                                id="average_rating_stat"
+                            >
+                                
+                            </span>
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <section class="library">
+                    
+                    <div class="library_header">
+                        <div>
+                            <h2>Game Library</h2>
+                            <p class="library_description">
+                                Browse and manage your games
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="library_toolbar">
+
+                        <div class="search_container">
+                            <span class="search_icon">⌕</span>
+
+                            <input
+                                type="search"
+                                id="search_input"
+                                class="search_input"
+                                placeholder="Search games..."
+                                autocomplete="off"
+                            >
+                        </div>
+
+                        <button
+                            type="button"
+                            id="add_game_button"
+                            class="add_game_button"
+                        >
+                            <span class="add_game_icon">+</span>
+                            <span>Add Game</span>
+                        </button>
+
+                    </div>
+
+                    <div class="filters_container">
+                        
+                        <div class="filter_group">
+                            <label for="genre_filter">Genre</label>
+
+                            <select id="genre_filter" class="filter_select">
+                                <option value="">All genres</option>
+                            </select>
+                        </div>
+
+                        <div class="filter_group">
+                            <label for="platform_filter">Platform</label>
+
+                            <select id="platform_filter" class="filter_select">
+                                <option value="">All platforms</option>
+                            </select>
+                        </div>
+
+                        <div class="filter_group">
+                            <label for="status_filter">Status</label>
+
+                            <select id="status_filter" class="filter_select">
+                                <option value="">All statuses</option>
+                                <option value="Backlog">Backlog</option>
+                                <option value="Playing">Playing</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Dropped">Dropped</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter_group">
+                            <label for="rating_filter">Rating</label>
+
+                            <select id="rating_filter" class="filter_select">
+                                <option value="">All ratings</option>
+                                <option value="9">9+</option>
+                                <option value="8">8+</option>
+                                <option value="7">7+</option>
+                                <option value="6">6+</option>
+                                <option value="5">5+</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="sorting_container">
+
+                        <div class="sorting_group">
+                            <label for="sort_filter">Sort by</label>
+
+                            <select id="sort_filter" class="filter_select">
+                                <option value="">Default</option>
+                                <option value="title_asc">Title ↑</option>
+                                <option value="title_desc">Title ↓</option>
+                                <option value="rating_asc">Rating ↑</option>
+                                <option value="rating_desc">Rating ↓</option>
+                                <option value="release_year_asc">Release year ↑</option>
+                                <option value="release_year_desc">Release year ↓</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div 
+                        id="game_library"
+                    >
+                        
+                    </div>
+
+                </section>
+
+                <section class="wishlist" id="wishlist_section">
+                    <div class="wishlist_header">
+                        <div>
+                            <h2>Wishlist</h2>
+                            <p class="wishlist_description">
+                                Games you want to play later.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="wishlist_library" id="wishlist_library">
+                    </div>
+                </section>
+
+            </main>
+
+        </div>
+
+        <div 
+            id="add_game_modal" 
+            class="modal"
+        >
+
+            <div class="modal_overlay"></div>
+
+            <div class="modal_content">
+
+                <div class="modal_header">
+
+                    <div>
+
+                        <h2 class="modal_title">
+                            Add Game
+                        </h2>
+
+                        <p class="modal_description">
+                            Add a new game to your library
+                        </p>
+
+                    </div>
+
+                    <button
+                        type="button" 
+                        id="close_modal_button" 
+                        class="close_modal_button"
+                    >
+                        x
+                    </button>
+
+                </div>
+
+                <form 
+                    id="add_game_form" 
+                    class="game_form"
+                    novalidate
+                >
+
+                    <div class="form_group">
+
+                        <label for="title">
+                            Title
+                        </label>
+
+                        <input 
+                            type="text" 
+                            id="title"
+                            name="title"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form_group">
+
+                        <label for="description">
+                            Description
+                        </label>
+
+                        <textarea
+                            id="description"
+                            name="description"
+                            rows="4"
+                        ></textarea>
+
+                    </div>
+
+                    <div class="form_group">
+
+                        <label for="genre">
+                            Genre
+                        </label>
+
+                        <input
+                            type="text"
+                            id="genre"
+                            name="genre"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form_group">
+
+                        <label for="platform">
+                            Platform
+                        </label>
+
+                        <input 
+                            type="text"
+                            id="platform"
+                            name="platform"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form_group">
+
+                        <label for="status">
+                            Status
+                        </label>
+
+                        <select
+                            id="status"
+                            name="status"
+                            required
+                        >
+                        
+                            <option value="Backlog">
+                                Backlog
+                            </option>
+
+                            <option value="Playing">
+                                Playing
+                            </option>
+
+                            <option value="Completed">
+                                Completed
+                            </option>
+
+                            <option value="Dropped">
+                                Dropped
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form_group">
+
+                        <label for="rating">
+                            Rating
+                        </label>
+
+                        <input
+                            type="number"
+                            id="rating"
+                            name="rating"
+                            min="0"
+                            max="10"
+                            step="0.1"
+                        >
+
+                    </div>
+
+                    <div class="form_group">
+
+                        <label for="release_year">
+                            Release year
+                        </label>
+
+                        <input
+                            type="number"
+                            id="release_year"
+                            name="release_year"
+                            min="1950"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form_group">
+
+                        <label for="cover_url">
+                            Cover URL
+                        </label>
+
+                        <input
+                            type="url"
+                            id="cover_url"
+                            name="cover_url"
+                            placeholder="https://..."
+                        >
+
+                    </div>
+
+                    <div class="modal_actions">
+
+                        <div class="form_message" id="form_message"></div>
+
+                        <button
+                            type="button"
+                            id="cancel_modal_button"
+                            class="cancel_button"
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="submit"
+                            id="save_game_button"
+                            class="save_button"
+                        >
+                            Save
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <div
+            id="edit_game_modal"
+            class="modal">
+
+            <div class="modal_overlay edit_modal_overlay"></div>
+
+            <div class="modal_content">
+
+                <div class="modal_header">
+
+                    <div>
+                        <h2 class="modal_title">
+                            Edit Game
+                        </h2>
+
+                        <p class="modal_description">
+                            Edit game description
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="close_edit_modal_button"
+                        class="close_modal_button"
+                    >
+                        x
+                    </button>
+
+                </div>
+                
+                <form
+                    id="edit_game_form"
+                    class="game_form"
+                    novalidate
+                >
+
+                    <div class="form_group">
+                        <label for="edit_title">Title</label>
+                        <input type="text" id="edit_title" name="title" required>
+                    </div>
+
+                    <div class="form_group">
+                        <label for="edit_description">Description</label>
+                        <textarea
+                            id="edit_description"
+                            name="description"
+                            rows="4"
+                        ></textarea>
+                    </div>
+                
+                    <div class="form_group">
+                        <label for="edit_genre">Genre</label>
+                        <input type="text" id="edit_genre" name="genre" required>
+                    </div>
+
+                    <div class="form_group">
+                        <label for="edit_platform">Platform</label>
+                        <input type="text" id="edit_platform" name="platform" required>
+                    </div>
+
+                    <div class="form_group">
+                        <label for="edit_status">Status</label>
+                        <select id="edit_status" name="status" required>
+                            <option value="Backlog">Backlog</option>
+                            <option value="Playing">Playing</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Dropped">Dropped</option>
+                        </select>
+                    </div>
+
+                    <div class="form_group">
+                        <label for="edit_rating">Rating</label>
+                        <input
+                            type="number"
+                            id="edit_rating"
+                            name="rating"
+                            min="0"
+                            max="10"
+                            step="0.1"
+                        >
+                    </div>
+
+                    <div class="form_group">
+                        <label for="edit_release_year">Release year</label>
+                        <input
+                            type="number"
+                            id="edit_release_year"
+                            name="release_year"
+                            min="1950"
+                            required
+                        >
+                    </div>
+
+                    <div class="form_group">
+                        <label for="edit_cover_url">Cover URL</label>
+                        <input
+                            type="url"
+                            id="edit_cover_url"
+                            name="cover_url"
+                            placeholder="https://..."
+                        >
+                    </div>
+
+                    <div class="modal_actions">
+
+                        <div
+                            class="form_message"
+                            id="edit_form_message"
+                        ></div>
+
+                        <button
+                            type="button"
+                            id="cancel_edit_modal_button"
+                            class="cancel_button"                        
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="submit"
+                            id="update_game_button"
+                            class="save_button"
+                        >
+                            Update
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+        
+        <div
+            id="settings_modal"
+            class="modal">
+
+            <div class="modal_overlay settings_modal_overlay"></div>
+
+            <div class="modal_content">
+
+                <div class="modal_header">
+
+                    <div>
+                        <h2 class="modal_title">
+                            Settings
+                        </h2>
+
+                        <p class="modal_description">
+                            Manage application settings
+                        </p>
+                    </div>
+                    
+                    <button
+                        type="button"
+                        id="close_settings_modal_button"
+                        class="close_modal_button"
+                    >
+                        x
+                    </button>
+
+                </div>
+
+                <div class="settings_content">
+
+                    <div class="settings_section">
+
+                        <div class="settings_section_header">
+                            <h3 class="settings_section_title">
+                                Appearance
+                            </h3>
+
+                            <p class="settings_section_description">
+                                Customize the appearance of GameVault.
+                            </p>
+                        </div>
+
+                        <div class="settings_item">
+
+                            <div class="settings_item_info">
+
+                                <span class="settings_item_title">
+                                    Theme
+                                </span>
+
+                                <span class="settings_item_description">
+                                    Choose the interface theme.
+                                </span>
+
+                            </div>
+
+                            <select 
+                                id="theme_setting"
+                                class="settings_select"
+                            >
+                                <option value="light">
+                                    Light
+                                </option>
+
+                                <option value="dark">
+                                    Dark
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="settings_section">
+
+                        <div class="settings_section_header">
+                            <h3 class="settings_section_title">
+                                Library
+                            </h3>
+
+                            <p class="settings_section_description">
+                                Configure how your game library is displayed.
+                            </p>
+                        </div>
+
+                        <div class="settings_item">
+
+                            <div class="settings_item_info">
+
+                                <span class="settings_item_title">
+                                    Show covers
+                                </span>
+
+                                <span class="settings_item_description">
+                                    Display game cover images in the library.
+                                </span>
+
+                            </div>
+
+                            <label class="settings_switch">
+
+                                <input
+                                    type="checkbox"
+                                    id="show_covers_setting"
+                                    checked
+                                >
+
+                                <span class="settings_switch_slider"></span>
+
+                            </label>
+
+                        </div>
+
+                        <div class="settings_item">
+
+                            <div class="settings_item_info">
+
+                                <span class="settings_item_title">
+                                    Compact cards
+                                </span>
+
+                                <span class="settings_item_description">
+                                    Reduce the size and spacing of game cards.
+                                </span>
+
+                            </div>
+
+                            <label class="settings_switch">
+
+                                <input
+                                    type="checkbox"
+                                    id="compact_cards_setting"
+                                >
+
+                                <span class="settings_switch_slider"></span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="settings_section">
+
+                        <div class="settings_section_header">
+                            <h3 class="settings_section_title">
+                                About
+                            </h3>
+
+                            <p class="settings_section_description">
+                                Information about GameVault.
+                            </p>
+                        </div>
+
+                        <div class="settings_about">
+
+                            <span class="settings_about_name">
+                                GameVault
+                            </span>
+
+                            <span class="settings_about_version">
+                                Version 1.0
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="settings_actions">
+
+                        <button
+                            type="button"
+                            id="reset_settings_button"
+                            class="reset_settings_button"
+                        >
+                            Reset settings
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/games.js"></script>
+    <script src="js/wishlist.js"></script>
+    <script src="js/filters.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/add_game.js"></script>
+    <script src="js/edit_game.js"></script>
+    <script src="js/game_actions.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/app.js"></script>
+    
+</body>
+</html>
